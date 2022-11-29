@@ -1,5 +1,6 @@
 from matplotlib import image
 from matplotlib import pyplot as plt
+import pandas as pd
 
 from PIL import Image
   
@@ -8,7 +9,9 @@ from PIL import Image
   
 # get width and height
 
-  
+df_bound_test = pd.read_csv("data/Annotation/boundingbox/bb_test.csv", sep=" ")
+df_bound_train = pd.read_csv("data/Annotation/boundingbox/bb_train.csv", sep=" ")
+
 
 x = input('Enter Image Number:')
 if int(x) > 12271:
@@ -78,19 +81,19 @@ else:
 
 # Test data(z) + Test Image(v)
 for i in range(0,len(z),2):
-    plt.plot(float(z[i]),float(z[i+1]), marker='o', color="red")
+    plt.plot(float(z[i]),float(z[i+1]), marker='o', color="red", markersize=1)
     plt.imshow(v)
 plt.show()
 
 # Train data(z2) + Train Image(v2)
 for i in range(0,len(z2),2):
-    plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="yellow")
+    plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="yellow", markersize=1)
     plt.imshow(v2)
 plt.show()
 
 r = [153.841080, 130.382935, 327.412231, 355.140106] 
 for i in range(0,len(r),2):
-    plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="red")
+    plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="red", markersize=1)
     plt.imshow(v)
 plt.show()
 
