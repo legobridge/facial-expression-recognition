@@ -2,10 +2,10 @@ from matplotlib import image
 from matplotlib import pyplot as plt
 import pandas as pd
   
-df_bound_test = pd.read_csv("data/Annotation/boundingbox/bb_test.csv")
-df_bound_train = pd.read_csv("data/Annotation/boundingbox/bb_train.csv")
+df_bound_test = pd.read_csv("../data/Annotation/boundingbox/bb_test.csv")
+df_bound_train = pd.read_csv("../data/Annotation/boundingbox/bb_train.csv")
 
-df_autostd_train = pd.read_csv("data/Annotation/auto/auto_test.csv")
+df_autostd_train = pd.read_csv("../data/Annotation/auto/auto_test.csv")
 
 flag = 1
 while flag == 1:
