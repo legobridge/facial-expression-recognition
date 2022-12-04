@@ -135,5 +135,6 @@ dmypy.json
 # our ignores
 data/basic-20221028T135529Z-001.zip
 data/basic
+data/Annotation/joined
 .idea
 
