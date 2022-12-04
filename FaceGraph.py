@@ -4,115 +4,259 @@ import pandas as pd
 
 from PIL import Image
   
-# get image
+df_bound_test = pd.read_csv("data/Annotation/boundingbox/bb_test.csv")
+df_bound_train = pd.read_csv("data/Annotation/boundingbox/bb_train.csv")
 
-  
-# get width and height
+df_autostd_train = pd.read_csv("data/Annotation/auto/vansh.csv")
 
-df_bound_test = pd.read_csv("data/Annotation/boundingbox/bb_test.csv", sep=" ")
-df_bound_train = pd.read_csv("data/Annotation/boundingbox/bb_train.csv", sep=" ")
+flag = 1
+while flag == 1:
+    q  = input('Enter Tr for Train, Te for Test:')
+    if q == 'Tr':
+        x = input('Enter Image Number between 1 to 12271:')
+        if int(x) > 12271:
+            print("No image with such number. Throwing error")
+        else:
+            le_x = len(str(x))
+            for i in range(le_x,5):
+                x = str(0) + str(x)
+            y = input('Enter Image Type - o or a:')
+            if (y == 'o') or (y == 'a'):
+                flag = 0
+            else:
+                print("Wrong input. Re-enter:")
 
+    else:
+        x = input('Enter Image Number between 1 to 3068:')
+        if int(x) > 3068:
+            print("No image with such number. Throwing error")
+        else:
+            le_x = len(str(x))
+            for i in range(le_x,4):
+                x = str(0) + str(x)
+            y = input('Enter Image Type - o or a:')
+            if (y == 'o') or (y == 'a'):
+                flag = 0
+            else:
+                print("Wrong input. Re-enter")
 
-x = input('Enter Image Number:')
-if int(x) > 12271:
-    print("No image with such number. Throwing error")
-# else:
-#     if len(str(x))    
-y = input('Enter Image Type - o or a:')
-w = input('Enter Data Type - M or A:')
-
-
-if w == 'A':
-
-    file_auto_test = open("data/basic/Annotation/auto/test_00" + str(x) + "_auto_attri.txt","r+") 
-    l = [file_auto_test.read()]
-    file_auto_test.close()
-    r = []
-    for i in l:
-        r.append(i.split())
-    z = r[0]
-
-    file_auto_train = open("data/basic/Annotation/auto/train_000" + str(x) + "_auto_attri.txt","r+") 
-    l2 = [file_auto_train.read()]
-    file_auto_train.close()
-    r2 = []
-    for j in l2:
-        r2.append(j.split())
-    z2 = r2[0]
-
-else:
-    file_manual_test = open("data/basic/Annotation/manual/test_00" + str(x) + "_manu_attri.txt","r+") 
-    l = [file_manual_test.read()]
-    file_manual_test.close()
-    r = []
-    for i in l:
-        r.append(i.split())
-    z = r[0]
-    z = z[:len(z)-3]
-
-    file_manual_train = open("data/basic/Annotation/manual/train_000" + str(x) + "_manu_attri.txt","r+") 
-    l2 = [file_manual_train.read()]
-    file_manual_train.close()
-    r2 = []
-    for j in l2:
-        r2.append(j.split())
-    z2 = r2[0]
-    z2 = z2[:len(z2)-3]
-
+# Aligned Image
 if y == 'a':
-# aligned
-    data_aligned_test_num = image.imread('data/basic/Image/aligned/test_00' + str(x) + '_aligned.jpg')
-    v = data_aligned_test_num
-    data_aligned_train_num = image.imread('data/basic/Image/aligned/train_000' + str(x) + '_aligned.jpg')
-    v2 = data_aligned_train_num
 
+    # Mising files
+    z2 = [1,1]
+    l_bb = [1,1]
+
+    # Test
+    if q == 'Te':
+        # Image
+        data_aligned_test_num = image.imread('data/basic/Image/aligned/test_' + str(x) + '_aligned.jpg')
+        v = data_aligned_test_num
+
+        # Aligned Auto Test Annotation
+
+        # Aligned Manual Test Annotation
+
+        # Aligned Test Bounding Box
+
+
+    # Train
+    else:
+        # Image
+        data_aligned_train_num = image.imread('data/basic/Image/aligned/train_' + str(x) + '_aligned.jpg')
+        v = data_aligned_train_num
+
+        # Aligned Auto Train Annotation
+        row = df_autostd_train[df_autostd_train['id'] == int(x)]
+        l_new = row.values.tolist()
+        z = l_new[0][1:]
+        for i in range(len(z)):
+            z[i] = float(z[i])*100
+        
+
+        # Aligned Manual Train Annotation
+
+        # Aligned Train Bounding Box
+
+# Original Image
 else:
-# original
-    data_test_num = image.imread('data/basic/Image/original/test_00' + str(x) + '.jpg')
-    v = data_test_num
-    data_train_num = image.imread('data/basic/Image/original/train_000' + str(x) + '.jpg')
-    v2 = data_train_num
 
-    img = Image.open('data/basic/Image/original/test_00' + str(x) + '.jpg')
-    width = img.width
-    height = img.height
+    # Test
+    if q == 'Te':
+        # Image
+        data_test_num = image.imread('data/basic/Image/original/test_' + str(x) + '.jpg')
+        v = data_test_num
 
+        # Auto Test Annotation
+        file_auto_test = open("data/basic/Annotation/auto/test_" + str(x) + "_auto_attri.txt","r+") 
+        l = [file_auto_test.read()]
+        file_auto_test.close()
+        r = []
+        for i in l:
+            r.append(i.split())
+        z = r[0]
 
+        # Manual Test Annotation
+        file_manual_test = open("data/basic/Annotation/manual/test_" + str(x) + "_manu_attri.txt","r+") 
+        l = [file_manual_test.read()]
+        file_manual_test.close()
+        r = []
+        for i in l:
+            r.append(i.split())
+        z2 = r[0]
+        z2 = z2[:len(z2)-3]
 
-# Test data(z) + Test Image(v)
+        # Test Bounding Box
+        row_bb_test = df_bound_test[df_bound_test['id'] == int(x)]
+        l_bb = row_bb_test.values.tolist()
+        l_bb = l_bb[0][1:]
+
+    # Train
+    else:
+        # Image
+        data_train_num = image.imread('data/basic/Image/original/train_' + str(x) + '.jpg')
+        v = data_train_num
+
+        # Auto Train Annotation
+        file_auto_train = open("data/basic/Annotation/auto/train_" + str(x) + "_auto_attri.txt","r+") 
+        l2 = [file_auto_train.read()]
+        file_auto_train.close()
+        r2 = []
+        for j in l2:
+            r2.append(j.split())
+        z = r2[0]
+
+        # Manual Train Annotation
+        file_manual_train = open("data/basic/Annotation/manual/train_" + str(x) + "_manu_attri.txt","r+") 
+        l2 = [file_manual_train.read()]
+        file_manual_train.close()
+        r2 = []
+        for j in l2:
+            r2.append(j.split())
+        z2 = r2[0]
+        z2 = z2[:len(z2)-3]
+
+        # Train Bounding Box
+        row_bb_train = df_bound_train[df_bound_train['id'] == int(x)]
+        l_bb = row_bb_train.values.tolist()
+        l_bb = l_bb[0][1:]
+
+if y == 'o':
+# Manual Annotation
+    for i in range(0,len(z2),2):
+        plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="red", markersize=1)
+        plt.imshow(v)
+    plt.show()
+
+# Auto Annotation
 for i in range(0,len(z),2):
     plt.plot(float(z[i]),float(z[i+1]), marker='o', color="red", markersize=1)
     plt.imshow(v)
+# plt.show()
+
+if y == 'o':
+# Bounding Box
+    for i in range(0,len(l_bb),2):
+        plt.plot((float(l_bb[i])),(float(l_bb[i+1])), marker='o', color="red")
+        plt.imshow(v)
 plt.show()
 
+
+
+
+
+
+# if w == 'A':
+#     if q == 'Te':
+#         file_auto_test = open("data/basic/Annotation/auto/test_" + str(x) + "_auto_attri.txt","r+") 
+#         l = [file_auto_test.read()]
+#         file_auto_test.close()
+#         r = []
+#         for i in l:
+#             r.append(i.split())
+#         z = r[0]
+#     else:
+#         file_auto_train = open("data/basic/Annotation/auto/train_" + str(x) + "_auto_attri.txt","r+") 
+#         l2 = [file_auto_train.read()]
+#         file_auto_train.close()
+#         r2 = []
+#         for j in l2:
+#             r2.append(j.split())
+#         z = r2[0]
+       
+
+
+# else:
+#     if q == 'Te':
+#         file_manual_test = open("data/basic/Annotation/manual/test_" + str(x) + "_manu_attri.txt","r+") 
+#         l = [file_manual_test.read()]
+#         file_manual_test.close()
+#         r = []
+#         for i in l:
+#             r.append(i.split())
+#         z = r[0]
+#         z = z[:len(z)-3]
+#     else:
+#         file_manual_train = open("data/basic/Annotation/manual/train_" + str(x) + "_manu_attri.txt","r+") 
+#         l2 = [file_manual_train.read()]
+#         file_manual_train.close()
+#         r2 = []
+#         for j in l2:
+#             r2.append(j.split())
+#         z = r2[0]
+#         z = z[:len(z)-3]
+
+# Bounding Box    
+# if y == 'o':
+#     if q == 'Te':
+#         row_bb_test = df_bound_test[df_bound_test['id'] == int(x)]
+#         l_bb = row_bb_test.values.tolist()
+#         l_bb = l_bb[0][1:]
+#     elif q == 'Tr':
+#         row_bb_train = df_bound_train[df_bound_train['id'] == int(x)]
+#         l_bb = row_bb_train.values.tolist()
+#         l_bb = l_bb[0][1:]
+# else:
+#     row = df_autostd_train[df_autostd_train['id'] == int(x)]
+#         # print(row)
+#     l_new = row.values.tolist()
+#     l_new = l_new[0][1:]
+#     for i in range(0,len(l_new),2):
+#         plt.plot((float(l_new[i]))*100,(float(l_new[i+1]))*100, marker='o', color="red")
+#         plt.imshow(v)
+#     plt.show()
 # Train data(z2) + Train Image(v2)
-for i in range(0,len(z2),2):
-    plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="yellow", markersize=1)
-    plt.imshow(v2)
-plt.show()
+# for i in range(0,len(z2),2):
+#     plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="yellow", markersize=1)
+#     plt.imshow(v2)
+# plt.show()
 
-r = [153.841080, 130.382935, 327.412231, 355.140106] 
-for i in range(0,len(r),2):
-    plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="red", markersize=1)
-    plt.imshow(v)
-plt.show()
 
-print("unscaled:",z)
-amin, amax = 0, width
-amin2, amax2 = 0, height
+    
+    
 
-for i in range(0,len(z),2):
-    z[i] = (float(z[i])/(amax-amin))*100
-    z[i+1] = (float(z[i+1])/(amax2-amin2))*100
-data_aligned_test_num = image.imread('data/basic/Image/aligned/test_00' + str(x) + '_aligned.jpg')
-v = data_aligned_test_num
+# r = [153.841080, 130.382935, 327.412231, 355.140106] 
+# for i in range(0,len(r),2):
+#     plt.plot(float(z2[i]),float(z2[i+1]), marker='o', color="red", markersize=1)
+#     plt.imshow(v)
+# plt.show()
 
-print("scaled:",z)
+# print("unscaled:",z)
+# amin, amax = 0, width
+# amin2, amax2 = 0, height
 
-for i in range(0,len(z),2):
-    plt.plot(float(z[i]),float(z[i+1]), marker='o', color="red")
-    plt.imshow(v)
-plt.show()
+# for i in range(0,len(z),2):
+#     z[i] = (float(z[i])/(amax-amin))*100
+#     z[i+1] = (float(z[i+1])/(amax2-amin2))*100
+# data_aligned_test_num = image.imread('data/basic/Image/aligned/test_00' + str(x) + '_aligned.jpg')
+# v = data_aligned_test_num
+
+# print("scaled:",z)
+
+# for i in range(0,len(z),2):
+#     plt.plot(float(z[i]),float(z[i+1]), marker='o', color="red")
+#     plt.imshow(v)
+# plt.show()
 
 
 
